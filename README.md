@@ -56,6 +56,24 @@ For development with an automatic rebuild watcher:
 npm run dev
 ```
 
+## Code quality and dependency updates
+
+Every production build runs the official [Obsidian ESLint plugin](https://github.com/obsidianmd/eslint-plugin) before TypeScript checking and bundling:
+
+```text
+npm run lint (zero warnings) → tsc --noEmit → esbuild
+```
+
+Lint warnings are treated as build failures. The configuration uses the plugin's recommended rules and checks the TypeScript source, settings UI, Obsidian API usage, command names, and user-interface text.
+
+Refresh the linting toolchain to its latest published versions with:
+
+```sh
+npm run update:lint
+```
+
+The repository also uses Dependabot to propose dependency updates, while the lockfile keeps ordinary builds reproducible.
+
 ## Settings
 
 Open the plugin's settings to configure:

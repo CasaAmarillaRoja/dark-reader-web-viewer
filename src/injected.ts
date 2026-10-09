@@ -13,15 +13,15 @@ type DarkReaderController = {
 	apply: (action: DarkReaderAction) => void;
 };
 
-type InjectedWindow = typeof globalThis & {
+type InjectedWindow = Window & {
 	[DARK_READER_ACTION_KEY]?: DarkReaderAction;
 	[DARK_READER_CONTROLLER_KEY]?: DarkReaderController;
 };
 
-const page = globalThis as InjectedWindow;
+const page = window as InjectedWindow;
 
 if (!page[DARK_READER_CONTROLLER_KEY]) {
-	setFetchMethod((url) => globalThis.fetch(url));
+	setFetchMethod((url) => window.fetch(url));
 
 	page[DARK_READER_CONTROLLER_KEY] = {
 		apply(action: DarkReaderAction) {

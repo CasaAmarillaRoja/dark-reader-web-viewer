@@ -42,27 +42,27 @@ export default class DarkReaderWebViewerPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'toggle-dark-reader',
-			name: 'Toggle Dark Reader for Web viewer',
+			name: 'Toggle web viewer dark mode',
 			callback: async () => {
 				await this.updateSettings({ enabled: !this.settings.enabled });
 				new Notice(
 					this.settings.enabled
-						? 'Dark Reader enabled for Web viewer.'
-						: 'Dark Reader disabled for Web viewer.',
+						? 'Dark reader enabled for Web viewer.'
+						: 'Dark reader disabled for Web viewer.',
 				);
 			},
 		});
 
 		this.addCommand({
 			id: 'reapply-dark-reader',
-			name: 'Reapply Dark Reader to Web viewer pages',
+			name: 'Reapply web viewer dark mode',
 			callback: async () => {
 				this.scanWebviews();
 				for (const binding of this.bindings.values()) {
 					binding.installed = false;
 				}
 				await this.applyToAllWebviews();
-				new Notice('Dark Reader reapplied to Web viewer pages.');
+				new Notice('Dark reader reapplied to web viewer pages.');
 			},
 		});
 

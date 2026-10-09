@@ -5,16 +5,23 @@
   "description": "An Obsidian plugin that applies Dark Reader to the native Web viewer.",
   "type": "module",
   "scripts": {
-    "dev": "node esbuild.config.mjs",
-    "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production"
+    "dev": "npm run lint && node esbuild.config.mjs",
+    "lint": "eslint . --max-warnings=0",
+    "update:lint": "npm install --save-dev eslint@latest eslint-plugin-obsidianmd@latest @eslint/js@latest globals@latest typescript-eslint@latest",
+    "build": "npm run lint && tsc --noEmit --skipLibCheck && node esbuild.config.mjs production"
   },
   "dependencies": {
     "darkreader": "4.9.133"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^22.15.17",
     "esbuild": "0.25.5",
+    "eslint": "^10.12.0",
+    "eslint-plugin-obsidianmd": "^0.4.2",
+    "globals": "^17.13.0",
     "obsidian": "latest",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.71.1"
   }
 }
