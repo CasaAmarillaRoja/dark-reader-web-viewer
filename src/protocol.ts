@@ -7,11 +7,18 @@ export interface DarkReaderThemeOptions {
 	sepia: number;
 }
 
+export interface ObsidianBaseColors {
+	background: string;
+	text: string;
+}
+
 export type DarkReaderAction =
 	| {
 			type: 'enable';
 			theme: DarkReaderThemeOptions;
+			baseColors?: ObsidianBaseColors;
 	  }
 	| {
 			type: 'disable';
+			baseColors?: ObsidianBaseColors;
 	  };

@@ -80,6 +80,7 @@ Open the plugin's settings to configure:
 
 - **Enable Dark Reader** — enable or disable page theming.
 - **Follow Obsidian theme** — enable Dark Reader only while Obsidian is using its dark theme. When disabled, Dark Reader remains active regardless of Obsidian's theme.
+- **Match Obsidian base colors** — use Obsidian's `--background-primary` and `--text-normal` values for the Web viewer page's base background and text colors. This is enabled by default and can be turned off.
 - **Brightness** — Dark Reader brightness percentage.
 - **Contrast** — Dark Reader contrast percentage.
 - **Sepia** — Dark Reader sepia percentage.
@@ -93,7 +94,7 @@ The command palette provides:
 
 The plugin watches for Obsidian Web viewer elements and binds to their Electron lifecycle events. When a page reaches `dom-ready`, it uses `webview.executeJavaScript()` to install a locally bundled Dark Reader API and call `DarkReader.enable()`.
 
-When the plugin is disabled, or when **Follow Obsidian theme** detects a switch to Obsidian's light theme, it calls `DarkReader.disable()` in the live page.
+When the plugin is disabled, or when **Follow Obsidian theme** detects a switch to Obsidian's light theme, it calls `DarkReader.disable()` in the live page. If **Match Obsidian base colors** is enabled, it applies Obsidian's primary background and normal text colors to non-media page elements, including dynamically added elements.
 
 The injector is generated during the build from the [`darkreader`](https://www.npmjs.com/package/darkreader) package. No third-party script is downloaded while the plugin is running.
 
@@ -103,6 +104,7 @@ The injector is generated during the build from the [`darkreader`](https://www.n
 - The plugin only affects native Web viewer tabs. It does not affect external browsers, Markdown preview, Canvas, or other embedded pages.
 - Page-specific Dark Reader settings and the full browser-extension settings UI are not included.
 - Cross-origin pages may behave differently from pages viewed through a full browser extension because this plugin runs through the page's Electron webview context.
+- Base-colour matching intentionally overrides most website background and text colors while enabled. Images, video, canvas, iframe, SVG, and other media-oriented elements are excluded, but links, controls, panels, code blocks, and other semantic colors may be flattened to the Obsidian palette.
 
 ## Development notes
 

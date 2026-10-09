@@ -5,6 +5,7 @@ import type DarkReaderWebViewerPlugin from './main';
 export interface DarkReaderSettings {
 	enabled: boolean;
 	followObsidianTheme: boolean;
+	matchObsidianColors: boolean;
 	brightness: number;
 	contrast: number;
 	sepia: number;
@@ -13,6 +14,7 @@ export interface DarkReaderSettings {
 export const DEFAULT_SETTINGS: DarkReaderSettings = {
 	enabled: true,
 	followObsidianTheme: false,
+	matchObsidianColors: true,
 	brightness: 100,
 	contrast: 90,
 	sepia: 0,
@@ -50,6 +52,15 @@ export class DarkReaderSettingTab extends PluginSettingTab {
 							type: 'toggle',
 							key: 'followObsidianTheme',
 							defaultValue: DEFAULT_SETTINGS.followObsidianTheme,
+						},
+					},
+					{
+						name: 'Match Obsidian base colors',
+						desc: "Apply Obsidian's primary background and normal text color to non-media page elements.",
+						control: {
+							type: 'toggle',
+							key: 'matchObsidianColors',
+							defaultValue: DEFAULT_SETTINGS.matchObsidianColors,
 						},
 					},
 					{
@@ -144,6 +155,21 @@ export class DarkReaderSettingTab extends PluginSettingTab {
 					.onChange(async (value) => {
 						await this.plugin.updateSettings({
 							followObsidianTheme: value,
+						});
+					}),
+			);
+
+		new Setting(containerEl)
+			.setName('Match Obsidian base colors')
+			.setDesc(
+				"Apply Obsidian's primary background and normal text color to non-media page elements.",
+			)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.matchObsidianColors)
+					.onChange(async (value) => {
+						await this.plugin.updateSettings({
+							matchObsidianColors: value,
 						});
 					}),
 			);

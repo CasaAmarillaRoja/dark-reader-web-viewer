@@ -3,8 +3,11 @@ import { DARK_READER_INJECTOR } from './generated-injector';
 import {
 	DARK_READER_ACTION_KEY,
 	DARK_READER_CONTROLLER_KEY,
+} from './protocol';
+import type {
 	DarkReaderAction,
 	DarkReaderThemeOptions,
+	ObsidianBaseColors,
 } from './protocol';
 import {
 	DEFAULT_SETTINGS,
@@ -288,7 +291,11 @@ export default class DarkReaderWebViewerPlugin extends Plugin {
 	private async performApply(binding: WebviewBinding): Promise<void> {
 		const action = this.getAction();
 
-		if (!binding.installed && action.type === 'disable') {
+		if (
+			!binding.installed &&
+			action.type === 'disable' &&
+			!action.baseColors
+		) {
 			return;
 		}
 
@@ -322,16 +329,24 @@ export default class DarkReaderWebViewerPlugin extends Plugin {
 	}
 
 	private getAction(): DarkReaderAction {
-		if (
-			!this.settings.enabled ||
-			(this.settings.followObsidianTheme && !this.isObsidianDark())
-		) {
-			return { type: 'disable' };
+		const baseColors = this.settings.matchObsidianColors
+			? this.getObsidianBaseColors()
+			: undefined;
+		const shouldEnableDarkReader =
+			this.settings.enabled &&
+			(!this.settings.followObsidianTheme || this.isObsidianDark());
+
+		if (shouldEnableDarkReader) {
+			return {
+				type: 'enable',
+				theme: this.getThemeOptions(),
+				baseColors,
+			};
 		}
 
 		return {
-			type: 'enable',
-			theme: this.getThemeOptions(),
+			type: 'disable',
+			baseColors: this.settings.enabled ? baseColors : undefined,
 		};
 	}
 
@@ -345,6 +360,36 @@ export default class DarkReaderWebViewerPlugin extends Plugin {
 			contrast: this.settings.contrast,
 			sepia: this.settings.sepia,
 		};
+	}
+
+	private getObsidianBaseColors(): ObsidianBaseColors {
+		const styles = document.body ? getComputedStyle(document.body) : null;
+		const dark = this.isObsidianDark();
+
+		return {
+			background: this.readThemeColor(
+				styles,
+				'--background-primary',
+				dark ? '#181a1b' : '#ffffff',
+			),
+			text: this.readThemeColor(
+				styles,
+				'--text-normal',
+				dark ? '#e8e6e3' : '#181a1b',
+			),
+		};
+	}
+
+	private readThemeColor(
+		styles: CSSStyleDeclaration | null,
+		property: string,
+		fallback: string,
+	): string {
+		const value = styles?.getPropertyValue(property).trim() ?? '';
+		if (!value || value.length > 100 || /[;{}]/.test(value)) {
+			return fallback;
+		}
+		return value;
 	}
 
 	private executeAction(
