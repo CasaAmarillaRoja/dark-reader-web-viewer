@@ -1,0 +1,20 @@
+{
+  "name": "obsidian-dark-reader-web-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An Obsidian plugin that applies Dark Reader to the native Web viewer.",
+  "type": "module",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production"
+  },
+  "dependencies": {
+    "darkreader": "4.9.133"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "esbuild": "0.25.5",
+    "obsidian": "latest",
+    "typescript": "^5.8.3"
+  }
+}
