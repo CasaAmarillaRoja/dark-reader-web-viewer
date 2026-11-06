@@ -11,7 +11,7 @@
     "build": "npm run lint && tsc --noEmit --skipLibCheck && node esbuild.config.mjs production"
   },
   "dependencies": {
-    "darkreader": "4.9.133"
+    "darkreader": "4.9.134"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
